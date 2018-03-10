@@ -6,7 +6,7 @@ public class TimingTest
 {
 	public static void main(String[] args) 
 	{
-		for (int i=3; i<8; i++) 
+		for (int i=3; i<9; i++) 
 		{
 			int size = (int)Math.pow(10, i);
 			System.out.printf("Sorting array of length %,d.%n", size);
