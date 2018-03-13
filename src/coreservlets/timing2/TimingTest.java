@@ -23,9 +23,11 @@ public class TimingTest
 	
 	  /** Make an n-length array of random numbers. */
 	  
-	  public static double[] randomNums(int length) {
+	  public static double[] randomNums(int length) 
+	  {
 	    double[] nums = new double[length];
-	    for(int i=0; i<length; i++) {
+	    for(int i=0; i<length; i++) 
+	    {
 	      nums[i] = Math.random();
 	    }
 	    return(nums);

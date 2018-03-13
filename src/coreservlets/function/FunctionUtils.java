@@ -75,9 +75,11 @@ public class FunctionUtils {
    */
   
   public static <T,R> List<R> transform(List<T> origValues, 
-                                        Function<T,R> transformer) {
+                                        Function<T,R> transformer) 
+  {
     List<R> transformedValues = new ArrayList<>();
-    for(T value: origValues) {
+    for(T value: origValues) 
+    {
       transformedValues.add(transformer.apply(value));
     }
     return(transformedValues);
@@ -94,7 +96,8 @@ public class FunctionUtils {
 
   @SafeVarargs
   public static <T> List<T> transform2(List<T> origValues, 
-                                       Function<T,T>... transformers) {
+                                       Function<T,T> ... transformers) 
+  {
     Function<T,T> composedFunction = composeAll(transformers);
     return(transform(origValues, composedFunction));
   } 
@@ -104,7 +107,8 @@ public class FunctionUtils {
    *  must all map their argument to an output of the SAME type (i.e., Function&lt;T,T&gt;).
    */
   @SafeVarargs
-  public static <T> Function<T,T> composeAll(Function<T,T> ... functions) {
+  public static <T> Function<T,T> composeAll(Function<T,T> ... functions) 
+  {
     Function<T,T> result = Function.identity();
     for(Function<T,T> f: functions) {
       result = result.compose(f);
@@ -116,8 +120,10 @@ public class FunctionUtils {
    *  forEach method of Stream and of List, which we have not yet covered.
    *  Used to illustrate the andThen method of Consumer.
    */
-  public static <T> void processEntries(List<T> entries, Consumer<T> operation) {
-    for(T e: entries) {
+  public static <T> void processEntries(List<T> entries, Consumer<T> operation) 
+  {
+    for(T e: entries) 
+    {
       operation.accept(e);
     }
   }

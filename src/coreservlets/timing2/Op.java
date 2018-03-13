@@ -7,6 +7,7 @@ public interface Op
 	
 	void runOp();
 	
+	// Static method
 	static void timeOp(Op operation)
 	{
 		long startTime = System.nanoTime();
@@ -16,6 +17,7 @@ public interface Op
 		System.out.printf("  Elapsed time: %.3f seconds.%n", elapsedSeconds);
 	}
 	
+	// Concrete method
 	default Op combinedOp(Op secondOp) 
 	{
 		return (() -> {
