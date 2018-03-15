@@ -2,6 +2,7 @@ package coreservlets.streams;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -21,6 +22,9 @@ public class StreamSamples
 		combinedExample();
 		System.out.println();
 		lazyEvaluationExample();
+		
+		System.out.println();
+		reduceExamples();
 	}
 
 	/** Examples of the forEach method */
@@ -142,5 +146,72 @@ public class StreamSamples
 				.filter(checkSalary)
 				.findFirst()
 				.orElse(null));
+	}
+	
+	/** Examples of the reduce method and related reduction operations. */
+
+	public static void reduceExamples() 
+	{
+		List<String> letters = Arrays.asList("a", "b", "c", "d");
+		String concat = letters.stream().reduce("", String::concat);
+		System.out.printf("Concatenation of %s is %s.%n", 
+				letters, concat);
+		String reversed = letters.stream().reduce("", (s1,s2) -> s2+s1);
+		System.out.printf("Reversed concatenation of %s is %s.%n", 
+				letters, reversed);
+		String upperReversed = 
+				letters.stream().reduce("", (s1,s2) -> s2.toUpperCase() + s1);
+		System.out.printf("Uppercase reversed concatenation of %s is %s.%n", 
+				letters, upperReversed);
+		String upperReversed2 = 
+				letters.stream().reduce("", (s1,s2) -> s2+s1).toUpperCase();
+		System.out.printf("Uppercase reversed concatenation of %s is %s.%n", 
+				letters, upperReversed2);
+
+		System.out.println();
+		Employee poorest = new Employee("None", "None", -1, -1);
+		BinaryOperator<Employee> richer = (e1, e2) -> {
+			return(e1.getSalary() >= e2.getSalary() ? e1 : e2);
+		};
+		List<Employee> googlers = EmployeeSamples.getGooglers();
+		Employee richestGoogler = googlers.stream().reduce(poorest, richer);
+		System.out.printf("Richest Googler is %s.%n", richestGoogler);
+
+		System.out.println();
+		List<Double> nums1a = Arrays.asList(1.2, -2.3, 4.5, -5.6);
+		double maxNum1 = 
+				nums1a.stream().reduce(Double.MIN_VALUE, Double::max);
+		System.out.printf("Max of %s is %s.%n", nums1a, maxNum1);
+		
+		double[] nums1b = {1.2, -2.3, 4.5, -5.6};
+		double maxNum2 = 
+				DoubleStream.of(nums1b).max().orElse(Double.MIN_VALUE);
+		System.out.printf("Max of [same numbers] is %s.%n", 
+				maxNum2);
+
+		System.out.println();
+		List<Integer> nums2 = Arrays.asList(1, 2, 3, 4);
+		int sum1 = nums2.stream().reduce(0, Integer::sum);
+		System.out.printf("Sum of %s is %s.%n", nums2, sum1);
+		int sum2 = nums2.stream().reduce(Integer::sum).get();
+		System.out.printf("Sum of %s is %s.%n", nums2, sum2);
+		int[] nums3 = { 1, 2, 3, 4 };
+		int sum3 = Arrays.stream(nums3).sum();
+		System.out.printf("Sum of {1, 2, 3, 4} is %s.%n", sum3);
+
+		int product = nums2.stream().reduce(1, (n1, n2) -> n1 * n2);
+		System.out.printf("Product of %s is %s.%n", nums2, product);
+
+		System.out.println();
+		int sum4 = nums2.stream().map(EmployeeSamples::findGoogler)
+				.map(Employee::getSalary)
+				.reduce(0, Integer::sum);
+		System.out.printf("Combined salaries of Googlers with IDs %s is $%,d.%n", 
+				nums2, sum4);
+		int sum5 = nums2.stream().map(EmployeeSamples::findGoogler)
+				.mapToInt(Employee::getSalary)
+				.sum();
+		System.out.printf("Combined salaries of Googlers with IDs %s is $%,d.%n", 
+				nums2, sum5);
 	}
 }
